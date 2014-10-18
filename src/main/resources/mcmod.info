@@ -1,0 +1,16 @@
+[
+{
+  "modid": "whitelist",
+  "name": "Whitelist Mod",
+  "description": "An automatic whitelister that connects to a MySQL database",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["LordDusk"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
