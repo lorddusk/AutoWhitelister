@@ -6,5 +6,5 @@ package nl.lang2619.whitelistmod.utils;
 public class ModInfo {
     public static final String ID = "whitelist";
     public static final String NAME = "White List Mod";
-    public static final String VERSION = "2.0";
+    public static final String VERSION = "3.1";
 }

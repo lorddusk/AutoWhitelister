@@ -2,9 +2,10 @@ package nl.lang2619.whitelistmod.utils;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+import nl.lang2619.whitelistmod.config.ModConfig;
 import nl.lang2619.whitelistmod.sql.DatabaseConfig;
 import nl.lang2619.whitelistmod.sql.ModMySQL;
+import nl.lang2619.whitelistmod.text.ModText;
 import nl.lang2619.whitelistmod.twitch.ModTwitch;
 import nl.lang2619.whitelistmod.twitch.TwitchConfig;
 
@@ -22,12 +23,16 @@ public class TickHandler {
     public void tickWhiteList(TickEvent.ServerTickEvent event) {
         tick++;
 
-        if (tick == (DatabaseConfig.time * 20 * 60)) {
+        if (tick == (ModConfig.time * 20 * 60)) {
             System.out.println("Running Whitelist");
-            if (!TwitchConfig.toggle) {
+            if (ModConfig.toggle.equalsIgnoreCase("mysql")) {
                 ModMySQL.checkWhitelist();
-            } else {
+            } else if (ModConfig.toggle.equalsIgnoreCase("twitch")) {
                 ModTwitch.checkWhitelist();
+            } else if (ModConfig.toggle.equalsIgnoreCase("text")) {
+                ModText.checkWhitelist();
+            } else {
+                System.out.println("No function selected.");
             }
             System.out.println("Finished Whitelist run.");
             tick = 0;

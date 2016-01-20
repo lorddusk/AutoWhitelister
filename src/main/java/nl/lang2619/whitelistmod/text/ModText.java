@@ -1,39 +1,43 @@
-package nl.lang2619.whitelistmod.twitch;
+package nl.lang2619.whitelistmod.text;
 
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.Mod;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.UserListWhitelist;
 import nl.lang2619.whitelistmod.config.ModConfig;
+import nl.lang2619.whitelistmod.twitch.TwitchConfig;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.xml.soap.Text;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Tim on 10/18/2014.
+ * Created by Tim on 24-12-2014.
  */
-public class ModTwitch {
+public class ModText {
     private static final HashSet<String> users = new HashSet<String>();
-    private static final HashSet<String> whitelisted = new HashSet<String>();
 
-    public static HashSet<String> getUsers(){
+    public static HashSet<String> getUsers() {
         return users;
     }
 
+    private static final HashSet<String> whitelisted = new HashSet<String>();
+
+    public static HashSet<String> getWhitelisted() {
+        return whitelisted;
+    }
+
     public static void checkWhitelist() {
-        try{
+        try {
             setUsers();
             Whitelisted();
             Iterator<String> names;
             names = users.iterator();
 
-            while(names.hasNext()) {
+            while (names.hasNext()) {
                 if (ModConfig.version.equalsIgnoreCase("add")) {
                     GameProfile gameProfile;
                     String name = names.next();
@@ -80,13 +84,14 @@ public class ModTwitch {
     }
 
     private static void setUsers() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(new URL("http://whitelist.twitchapps.com/list.php?id="+ TwitchConfig.id).openStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(new File(TextConfig.path))));
         String l;
 
-        while((l = in.readLine()) != null){
+        while ((l = in.readLine()) != null) {
             users.add(l.trim().toLowerCase());
         }
     }
+
 
     public static void Whitelisted() {
         String[] names = MinecraftServer.getServer().getConfigurationManager().func_152599_k().func_152685_a();
@@ -95,4 +100,5 @@ public class ModTwitch {
             whitelisted.add(names[i].toLowerCase());
         }
     }
+
 }

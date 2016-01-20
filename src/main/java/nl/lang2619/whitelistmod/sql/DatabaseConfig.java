@@ -9,5 +9,5 @@ public class DatabaseConfig {
     public static String username;
     public static String password;
     public static String query;
-    public static int time;
+
 }
