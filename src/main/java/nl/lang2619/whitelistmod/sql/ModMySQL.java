@@ -41,45 +41,53 @@ public class ModMySQL {
             preparedStatement = con.prepareStatement(DatabaseConfig.query);
             rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                if (ModConfig.version.equalsIgnoreCase("add")) {
+            if (ModConfig.version.equalsIgnoreCase("add")) {
+
+                while (rs.next()) {
                     GameProfile gameProfile;
                     String name = rs.getString(1).trim().toLowerCase();
-                    gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
-                    try {
-                        MinecraftServer.getServer().getConfigurationManager().func_152601_d(gameProfile);
-                    } catch (NullPointerException e) {
-                        System.out.println(name + " doesn't exist");
-                    }
-                }
-                if (ModConfig.version.equalsIgnoreCase("sync")) {
-                    String name = null;
-                    try {
-                        GameProfile gameProfile;
-                        name = rs.getString(1).trim().toLowerCase();
+                    if (!whitelisted.contains(name)) {
                         gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
-                        MinecraftServer.getServer().getConfigurationManager().func_152601_d(gameProfile);
-                    } catch (NullPointerException e) {
-                        System.out.println(name + " doesn't exist");
-                    }
-                    try {
-                        Iterator<String> names2;
-                        names2 = whitelisted.iterator();
-                        while (names2.hasNext()) {
-                            GameProfile gameProfile1;
-                            String name2 = names2.next();
-                            if (!users.contains(name2)) {
-                                gameProfile1 = MinecraftServer.getServer().func_152358_ax().func_152655_a(name2);
-                                MinecraftServer.getServer().getConfigurationManager().func_152597_c(gameProfile1);
-                            }
+                        try {
+                            MinecraftServer.getServer().getConfigurationManager().func_152601_d(gameProfile);
+                        } catch (NullPointerException e) {
+                            System.out.println(name + " doesn't exist");
                         }
-                    } catch (Exception e) {
-
                     }
                 }
 
+            } else if (ModConfig.version.equalsIgnoreCase("sync")) {
+
+                while (rs.next()) {
+                    GameProfile gameProfile;
+                    String name = rs.getString(1).trim().toLowerCase();
+                    if (!whitelisted.contains(name)) {
+                        gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
+                        try {
+                            MinecraftServer.getServer().getConfigurationManager().func_152601_d(gameProfile);
+                        } catch (NullPointerException e) {
+                            System.out.println(name + " doesn't exist");
+                        }
+                    }
+                }
+
+                Iterator<String> names2;
+                names2 = whitelisted.iterator();
+                while (names2.hasNext()) {
+                    GameProfile gameProfile1;
+                    String name2 = names2.next();
+                    if (!users.contains(name2)) {
+                        gameProfile1 = MinecraftServer.getServer().func_152358_ax().func_152655_a(name2);
+                        try {
+                            MinecraftServer.getServer().getConfigurationManager().func_152597_c(gameProfile1);
+                        } catch (NullPointerException e) {
+
+                        }
+                    }
+                }
 
             }
+
             MinecraftServer.getServer().getConfigurationManager().loadWhiteList();
 
         } catch (CommunicationsException ex) {
